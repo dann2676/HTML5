@@ -13,6 +13,7 @@ if(navigator.getUserMedia){                    // Standard
     navigator.mozGetUserMedia(videoObj, iniciarWebcam, errBack);
 };
 
+
 function iniciarWebcam(stream){
     var video            = document.getElementById("v"),
         canvas            = document.getElementById("c");
@@ -27,6 +28,26 @@ function iniciarWebcam(stream){
         video.src = window.URL.createObjectURL(stream);
         video.play();
     };
+	
+	$('#env').click(function(){
+		var datos = canvas.toDataURL('image/png');
+		
+		$.ajax({
+			type:'POST',
+			url: 'http://www.sisobox.net/WNaoService.asmx/UpdateFOTO',
+			data: "{'PEmployId':'874563', 'foto':'"+datos+"', 'cs': '79710254'}",
+			contentType: 'application/json; utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data.d != null) {
+                    alert(data.d);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {    
+				alert(textStatus)
+            }
+		});
+	});
 
     // Click para hacer la foto
     $('#b').click(function(){
